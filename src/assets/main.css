@@ -1,0 +1,22 @@
+/* @import './base.css'; */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: "jakarta";
+  src: url(./font/PlusJakartaSans-Medium.ttf);
+}
+
+#app {
+  font-family: "jakarta";
+}
+
+html {
+  font-size: 16px;
+  background-color: #F9F8FF;
+}

@@ -1,0 +1,27 @@
+@font-face {
+  font-family: "mz-icons"; /* Project id 4469211 */
+  src: url('iconfont.woff2?t=1711617864343') format('woff2'),
+       url('iconfont.woff?t=1711617864343') format('woff'),
+       url('iconfont.ttf?t=1711617864343') format('truetype');
+}
+
+.mz-icons {
+  font-family: "mz-icons" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.mz-icon-map-connect:before {
+  content: "\ea02";
+}
+
+.mz-icon-connecting_line:before {
+  content: "\e67b";
+}
+
+.mz-icon-huanjierenwu:before {
+  content: "\e600";
+}
+

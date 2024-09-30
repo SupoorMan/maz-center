@@ -1,0 +1,30 @@
+{
+  "id": "4469211",
+  "name": "maz",
+  "font_family": "mz-icons",
+  "css_prefix_text": "mz-icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "18170999",
+      "name": "地图连线,连线,连接",
+      "font_class": "map-connect",
+      "unicode": "ea02",
+      "unicode_decimal": 59906
+    },
+    {
+      "icon_id": "4922682",
+      "name": "连接线",
+      "font_class": "connecting_line",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "27253621",
+      "name": "环节任务",
+      "font_class": "huanjierenwu",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}
