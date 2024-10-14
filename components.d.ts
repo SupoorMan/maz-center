@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BaseLayout: typeof import('./src/components/web/BaseLayout.vue')['default']
     Condition: typeof import('./src/components/base/Condition.vue')['default']
+    copy: typeof import('./src/components/base/Condition copy.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -52,6 +53,7 @@ declare module 'vue' {
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
     Logo: typeof import('./src/components/base/Logo.vue')['default']
+    MazButton: typeof import('./src/components/base/Maz-Button.vue')['default']
     Menu: typeof import('./src/components/base/Menu.vue')['default']
     MzSelect: typeof import('./src/components/base/Mz-Select.vue')['default']
     RouteDetail: typeof import('./src/components/base/RouteDetail.vue')['default']
