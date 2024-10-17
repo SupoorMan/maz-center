@@ -10,6 +10,7 @@ declare module 'vue' {
     BaseLayout: typeof import('./src/components/web/BaseLayout.vue')['default']
     Condition: typeof import('./src/components/base/Condition.vue')['default']
     copy: typeof import('./src/components/base/Condition copy.vue')['default']
+    ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']

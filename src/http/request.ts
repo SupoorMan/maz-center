@@ -1,17 +1,21 @@
 import axios from "axios";
+import { ref } from "vue";
+
+const token = ref("");
 
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: "http://127.0.0.1:8118/manage", // 所有的请求地址前缀部分
-  timeout: 60000, // 请求超时时间毫秒
+  timeout: 30000, // 请求超时时间毫秒
   withCredentials: true, // 异步请求携带cookie
   headers: {
     // 设置后端需要的传参类型
     "Content-Type": "application/json",
-    token: "",
+    token: token.value,
     "Access-Control-Allow-Origin": "*",
   },
 });
+
 
 // 添加请求拦截器
 service.interceptors.request.use(
@@ -29,12 +33,9 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
-    const dataAxios = response.data;
-    if (dataAxios.code != 200) {
-      return Promise.reject(e_msg);
-    }
-
-    return dataAxios;
+    //console.log(response)
+    token.value = response.headers.token;
+    return response.data;
   },
   function (error) {
     console.log(error);
@@ -42,79 +43,3 @@ service.interceptors.response.use(
   }
 );
 export default service;
-
-
-
-const e_msg =
-  "T" +
-  "h" +
-  "e" +
-  " " +
-  "s" +
-  "e" +
-  "r" +
-  "v" +
-  "e" +
-  "r" +
-  " " +
-  "i" +
-  "s" +
-  " " +
-  "e" +
-  "x" +
-  "p" +
-  "e" +
-  "r" +
-  "i" +
-  "e" +
-  "n" +
-  "c" +
-  "i" +
-  "n" +
-  "g" +
-  " " +
-  "a" +
-  "n" +
-  " " +
-  "i" +
-  "s" +
-  "s" +
-  "u" +
-  "e" +
-  "," +
-  " " +
-  "w" +
-  "e" +
-  " " +
-  "w" +
-  "i" +
-  "l" +
-  "l" +
-  " " +
-  "f" +
-  "i" +
-  "x" +
-  " " +
-  "i" +
-  "t" +
-  " " +
-  "a" +
-  "s" +
-  " " +
-  "s" +
-  "o" +
-  "o" +
-  "n" +
-  " " +
-  "a" +
-  "s" +
-  " " +
-  "p" +
-  "o" +
-  "s" +
-  "s" +
-  "i" +
-  "b" +
-  "l" +
-  "e" +
-  "!";

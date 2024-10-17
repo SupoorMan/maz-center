@@ -1,18 +1,10 @@
-declare namespace Obj {
+declare namespace M {
   //api响应类型
   type response = {
     code?: number;
     message?: String;
     data?: any;
   };
-
-  //临时凭证
-  type cert = {
-    platform?: String;
-    timestamp?: String;
-    version?: 'M-1.0.1';
-  };
-
 
   //全局方案配置
   type optionConfig = {
