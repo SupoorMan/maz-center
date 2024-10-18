@@ -112,7 +112,10 @@ import { postCert, postLogin } from '@/http/Users';
 import router from '@/router';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
+// import { store } from "@/stores/status";
+// import { storeToRefs } from "pinia";
 
+// const { token } = storeToRefs(store());
 onMounted(() => {
     login_cert()
 })
@@ -203,14 +206,19 @@ const login_up = () => {
             localStorage.removeItem('cert');
             localStorage.removeItem('cert_p');
 
-            localStorage.setItem('uid',res.data)
+            localStorage.setItem('uid', res.data)
             router.push('/')
         } else {
-            ElMessage.error('登录失败: ' + res.message)
+            if (res.code == 1001) {
+                localStorage.removeItem('cert');
+                localStorage.removeItem('cert_p');
+            }
+
+            ElMessage.error('' + res.message)
             loginDisabled.value = false;
         }
     }).catch(e => {
-        ElMessage.error('登录失败: !')
+        ElMessage.error('登录失败: 请刷新页面!')
         loginDisabled.value = false;
     })
 }

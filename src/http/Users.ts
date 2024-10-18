@@ -1,4 +1,5 @@
 import request from "./request";
+import { store } from "@/stores/status";
 
 export const postCert = (code: string) => {
   return request.request({
@@ -14,9 +15,11 @@ export const postCert = (code: string) => {
 };
 
 export const postLogin = (param: any) => {
-  return request.request({
+  let login = request.request({
     url: "/security/login", //请求的接口路径
     method: "post", //请求方法
     data: param,
   });
+
+  return login;
 };

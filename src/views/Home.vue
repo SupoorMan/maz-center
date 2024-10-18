@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="2">搜索</el-col>
         <el-col :span="4">
-          <el-select v-model="menuState.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect"
+          <el-select v-model="status.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect"
             style="width: 88%">
             <el-option v-for="item in menu_first" :key="item.id" :label="item.label" :value="item.id" />
             <template #footer>
@@ -108,10 +108,10 @@ import {
 } from '@element-plus/icons-vue';
 import { onMounted, ref } from 'vue';
 import type { CheckboxValueType } from 'element-plus'
-import { menuStore } from '@/stores/counter';
+import { store } from '@/stores/status';
 import { menuList, 条件查询菜单列表 } from '@/http/Public';
 
-const menuState = menuStore()
+const status = store()
 
 const menu_first = ref<Obj.Menu[]>()
 const menu_second = ref<Obj.Menu2[]>()
@@ -175,7 +175,7 @@ onMounted(() => {
   //一级
   const cache_crt_first_menu = localStorage.getItem('crt_first_menu')
   if (cache_crt_first_menu) {
-    menuState.crt_first_menu = parseInt(cache_crt_first_menu)
+    status.crt_first_menu = parseInt(cache_crt_first_menu)
   }
 
   //二级
@@ -193,7 +193,7 @@ onMounted(() => {
   //三级
 })
 
-const getFirstMenuList = ()=>{
+const getFirstMenuList = () => {
   let param = {
     pid: -1
   }

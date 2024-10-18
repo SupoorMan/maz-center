@@ -15,6 +15,9 @@ const router = createRouter({
       path: "/",
       name: "主页",
       component: Home,
+      meta: {
+        requireAuth: true,
+      },
       children: [
         {
           path: "/project",
@@ -159,7 +162,8 @@ const router = createRouter({
       path: "/about",
       name: "about",
       component: () => import("../views/AboutView.vue"),
-    },{
+    },
+    {
       path: "/square",
       name: "🚲 骑行",
       component: () => import("../views/square/bike/Home.vue"),
@@ -168,19 +172,23 @@ const router = createRouter({
           path: "/square/friend",
           name: "搭子",
           component: () => import("../views/square/bike/Friend.vue"),
-        },{
+        },
+        {
           path: "/square/hall",
           name: "大厅",
           component: () => import("../views/square/bike/Hall.vue"),
-        },{
+        },
+        {
           path: "/square/sport",
           name: "出发",
           component: () => import("../views/square/bike/Sport.vue"),
-        },{
+        },
+        {
           path: "/square/music",
           name: "音乐",
           component: () => import("../views/square/bike/Music.vue"),
-        },{
+        },
+        {
           path: "/square/my",
           name: "我的",
           component: () => import("../views/square/bike/My.vue"),
@@ -188,6 +196,15 @@ const router = createRouter({
       ],
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    console.log("需要认证权限进入");
+    next()
+  } else {
+    next();
+  }
 });
 
 export default router;
