@@ -23,3 +23,11 @@ export const postLogin = (param: any) => {
 
   return login;
 };
+
+export const testAPIs = () => {
+  return request.request({
+    url: "/token", //请求的接口路径
+    method: "post", //请求方法
+    data: null,
+  });;
+};

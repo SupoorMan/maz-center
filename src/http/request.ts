@@ -11,7 +11,7 @@ const service = axios.create({
   headers: {
     "Content-Type": "application/json;charset=utf-8",
     // "Access-Control-Allow-Origin": "*",
-    "X-Request-With": "XMLHttpRequest"
+    "X-Request-With": "XMLHttpRequest",
   },
 });
 
@@ -19,6 +19,7 @@ const service = axios.create({
 service.interceptors.request.use(
   function (config) {
     const status = store();
+    console.log("请求携带token:" + status.token);
     config.headers.set("token", status.token);
     return config;
   },
@@ -32,13 +33,16 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   function (response) {
     if (response.config.url == "/security/login") {
-      const status = store();
-      status.token = response.headers.token;
+      store().token = response.headers.token;
+      console.log("登录后获取到token:" + response.headers.token);
+    }
+    if (response.data.code != 200) {
+      ElMessage.error("响应:" + response.data.message);
     }
     return response.data;
   },
   function (error) {
-    ElMessage.error("响应:" + error);
+    ElMessage.error("API: " + error);
     return Promise.reject(error);
   }
 );

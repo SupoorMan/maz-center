@@ -32,7 +32,9 @@
           </el-select>
         </el-col>
 
-        <el-col :span="1">∞</el-col>
+        <el-col :span="1">
+          <el-button @click="testAPI">∞</el-button>
+        </el-col>
         <el-col :span="2">用户信息</el-col>
       </el-row>
     </div>
@@ -110,8 +112,17 @@ import { onMounted, ref } from 'vue';
 import type { CheckboxValueType } from 'element-plus'
 import { store } from '@/stores/status';
 import { menuList, 条件查询菜单列表 } from '@/http/Public';
+import { testAPIs } from '@/http/Users';
 
 const status = store()
+
+const testAPI= ()=>{
+  console.log("测试接口")
+  testAPIs().then(res=>{
+    console.log(res)
+  })
+}
+
 
 const menu_first = ref<Obj.Menu[]>()
 const menu_second = ref<Obj.Menu2[]>()

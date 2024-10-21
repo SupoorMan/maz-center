@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Project from "../views/project/Project.vue";
+import { store } from "@/stores/status";
+import { ElMessage } from "element-plus";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -199,12 +201,21 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requireAuth) {
-    console.log("需要认证权限进入");
-    next()
-  } else {
-    next();
-  }
+  // if (to.meta.requireAuth) {
+  //   console.log("token:" + store().token);
+  //   if (store().token == "") {
+  //     ElMessage({
+  //       message: "登录信息已过期,请重新登录!",
+  //       type: "success",
+  //     });
+  //     next("/login");
+  //   } else {
+  //     next();
+  //   }
+  // } else {
+  //   next();
+  // }
+  next()
 });
 
 export default router;

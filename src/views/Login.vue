@@ -110,6 +110,7 @@
 <script setup lang="ts">
 import { postCert, postLogin } from '@/http/Users';
 import router from '@/router';
+import { store } from '@/stores/status';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
 // import { store } from "@/stores/status";
@@ -206,7 +207,6 @@ const login_up = () => {
             localStorage.removeItem('cert');
             localStorage.removeItem('cert_p');
 
-            localStorage.setItem('uid', res.data)
             router.push('/')
         } else {
             if (res.code == 1001) {
