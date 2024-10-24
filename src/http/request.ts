@@ -18,9 +18,9 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
   function (config) {
-    const status = store();
-    console.log("请求携带token:" + status.token);
-    config.headers.set("token", status.token);
+    // const status = store();
+    console.log("请求携带token:" + localStorage.getItem("token"));
+    config.headers.set("token", localStorage.getItem("token"));
     return config;
   },
   function (error) {
@@ -32,12 +32,12 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
-    if (response.config.url == "/security/login") {
-      store().token = response.headers.token;
-      console.log("登录后获取到token:" + response.headers.token);
-    }
+    localStorage.setItem("token", response.headers.token);
+    console.log("响应获取到token:" + response.headers.token);
+
     if (response.data.code != 200) {
       ElMessage.error("响应:" + response.data.message);
+      return Promise.reject(response.data.message);
     }
     return response.data;
   },

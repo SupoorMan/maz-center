@@ -215,7 +215,8 @@ router.beforeEach((to, from, next) => {
   // } else {
   //   next();
   // }
-  next()
+  console.log("路由:" + store().token);
+  next();
 });
 
 export default router;
