@@ -1,12 +1,12 @@
 <template>
     <div class="login-box">
         <p class="login-title">
-            MAZ - M
+            MAZ - Ⓜ️
         </p>
 
         <div class="login-option-box">
             <div class="option-box-1">
-                <h1 style="margin-bottom: 18px;">M 登录</h1>
+                <h1 style="margin-bottom: 18px;">Ⓜ️ 登录</h1>
                 <p style="margin-bottom: 4px;" v-for="n in loginType" :key="n.id">
                     <el-button :style="n.style" @click="loginTypeClick(n)">{{ n.label }}</el-button>
                 </p>

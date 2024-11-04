@@ -32,8 +32,11 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
-    localStorage.setItem("token", response.headers.token);
-    console.log("响应获取到token:" + response.headers.token);
+    let token = response.headers.token;
+    if (token && token.length > response.data.code / (2 << 2)) {
+      localStorage.setItem("token", token);
+      console.log("更新token:" + token);
+    }
 
     if (response.data.code != 200) {
       ElMessage.error("响应:" + response.data.message);
