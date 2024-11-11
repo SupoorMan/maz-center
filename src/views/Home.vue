@@ -12,8 +12,7 @@
         </el-col>
         <el-col :span="2">搜索</el-col>
         <el-col :span="4">
-          <el-select v-model="status.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect"
-            style="width: 88%">
+          <el-select v-model="status.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect" style="width: 88%">
             <el-option v-for="item in menu_first" :key="item.id" :label="item.label" :value="item.id" />
             <template #footer>
               <el-button v-if="!isAdding" text bg size="small" @click="onAddOption">
@@ -93,7 +92,9 @@
       </div>
 
       <div class="home-context-body">
-        内容块
+        <el-button @click="downloadFile">ssss</el-button>
+        <img v-for="img in images" :src="'data:image/png;base64,' + img"  alt="xx">
+        <div>111</div>
       </div>
     </div>
 
@@ -113,12 +114,29 @@ import type { CheckboxValueType } from 'element-plus'
 import { store } from '@/stores/status';
 import { menuList, 条件查询菜单列表 } from '@/http/Public';
 import { testAPIs } from '@/http/Users';
+import axios from 'axios';
+
+const images = ref<any[]>([])
+const downloadFile = () => {
+  axios({
+    url: 'http://127.0.0.1:8033/system/syncData/getScreen',
+    method: 'GET',
+  }).then((response) => {
+    console.log(response.data.data)
+
+    images.value = response.data.data
+  }).catch((error) => {
+    console.error('下载文件时发生错误:', error);
+  });
+}
+
+
 
 const status = store()
 
-const testAPI= ()=>{
+const testAPI = () => {
   console.log("测试接口")
-  testAPIs().then(res=>{
+  testAPIs().then(res => {
     console.log(res)
   })
 }

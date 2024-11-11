@@ -173,10 +173,12 @@ const getPhoneCode = () => {
 }
 
 const user = ref({
+    loginType: 0,
     username: '',
     password: '',
     cert: '',
-    certP: ''
+    certP: '',
+    platform: "M",
 })
 
 const loginDisabled = ref(false)
@@ -224,24 +226,12 @@ const login_up = () => {
 }
 
 const login_cert = () => {
-    let cert = localStorage.getItem('cert');
-    if (cert == null || cert == '') {
-        let cert_p = localStorage.getItem('cert_p')
-        let qCode = ''
-        if (cert_p != null && cert_p != '') {
-            qCode = cert_p
-        } else {
-            qCode = '' + Math.floor(Math.random() * 1000000000) + 1;
-            qCode += new Date().getTime();
-            localStorage.setItem('cert_p', qCode);
+    let cert: any = localStorage.getItem('cert');
+    postCert(cert).then((res: M.response) => {
+        if (res.code == 200) {
+            localStorage.setItem('cert', res.data);
         }
-
-        postCert(qCode).then((res: M.response) => {
-            if (res.code == 200) {
-                localStorage.setItem('cert', res.data);
-            }
-        })
-    }
+    })
 }
 </script>
 
