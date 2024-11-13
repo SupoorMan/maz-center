@@ -93,7 +93,7 @@
 
       <div class="home-context-body">
         <el-button @click="downloadFile">ssss</el-button>
-        <img v-for="img in images" :src="'data:image/png;base64,' + img"  alt="xx">
+        <img v-for="img in images" :src="'data:image/png;base64,' + img" alt="xx">
         <div>111</div>
       </div>
     </div>
@@ -112,7 +112,7 @@ import {
 import { onMounted, ref } from 'vue';
 import type { CheckboxValueType } from 'element-plus'
 import { store } from '@/stores/status';
-import { menuList, 条件查询菜单列表 } from '@/http/Public';
+import { menuList, MenuSearch } from '@/http/Public';
 import { testAPIs } from '@/http/Users';
 import axios from 'axios';
 
@@ -129,7 +129,6 @@ const downloadFile = () => {
     console.error('下载文件时发生错误:', error);
   });
 }
-
 
 
 const status = store()
@@ -152,54 +151,57 @@ const menu_all = ref<Obj.MenuALL>()//所有菜单
 onMounted(() => {
   getFirstMenuList()
 
-  menu_first.value = [
-    {
-      id: 4, topId: 0, label: '平台中心', path: '',
-    },
-    {
-      id: 1, topId: 0, label: '甘其果', path: '',
-    },
-    {
-      id: 2, topId: 0, label: '管理后台', path: '',
-    },
-    {
-      id: 3, topId: 0, label: '其他', path: '',
-    },
-  ]
-  menu_second.value = [
-    {
-      id: 4, topId: 1, label: '2后理4', path: '/a',
-    },
-    {
-      id: 1, topId: 1, label: '2后理1', path: '/a',
-    },
-    {
-      id: 2, topId: 2, label: '2后台理2', path: '/a',
-    },
-    {
-      id: 3, topId: 4, label: '2管理3', path: '/a',
-    },
-  ]
-  menu_third.value = [
-    {
-      id: 4, topId: 1, label: '3后台管理4', path: '/a',
-    },
-    {
-      id: 1, topId: 2, label: '3后台管理1', path: '/a',
-    },
-    {
-      id: 2, topId: 3, label: '3后台管理2', path: '/a',
-    },
-    {
-      id: 3, topId: 4, label: '3后台管理3', path: '/a',
-    },
-  ]
+  // menu_first.value = [
+  //   {
+  //     id: 0, topId: 0, label: '初始页', path: '',
+  //   },
+  //   {
+  //     id: 4, topId: 0, label: '平台中心', path: '',
+  //   },
+  //   {
+  //     id: 1, topId: 0, label: '甘其果', path: '',
+  //   },
+  //   {
+  //     id: 2, topId: 0, label: '管理后台', path: '',
+  //   },
+  //   {
+  //     id: 3, topId: 0, label: '其他', path: '',
+  //   },
+  // ]
+  // menu_second.value = [
+  //   {
+  //     id: 4, topId: 1, label: '2后理4', path: '/a',
+  //   },
+  //   {
+  //     id: 1, topId: 1, label: '2后理1', path: '/a',
+  //   },
+  //   {
+  //     id: 2, topId: 2, label: '2后台理2', path: '/a',
+  //   },
+  //   {
+  //     id: 3, topId: 4, label: '2管理3', path: '/a',
+  //   },
+  // ]
+  // menu_third.value = [
+  //   {
+  //     id: 4, topId: 1, label: '3后台管理4', path: '/a',
+  //   },
+  //   {
+  //     id: 1, topId: 2, label: '3后台管理1', path: '/a',
+  //   },
+  //   {
+  //     id: 2, topId: 3, label: '3后台管理2', path: '/a',
+  //   },
+  //   {
+  //     id: 3, topId: 4, label: '3后台管理3', path: '/a',
+  //   },
+  // ]
 
-  menu_all.value = {
-    0: menu_first.value,
-    1: menu_second.value,
-    2: menu_third.value
-  }
+  // menu_all.value = {
+  //   0: menu_first.value,
+  //   1: menu_second.value,
+  //   2: menu_third.value
+  // }
 
   //一级
   const cache_crt_first_menu = localStorage.getItem('crt_first_menu')
@@ -226,8 +228,8 @@ const getFirstMenuList = () => {
   let param = {
     pid: -1
   }
-  条件查询菜单列表(param).then(res => {
-    console.log('请求菜单:' + JSON.stringify(res))
+  MenuSearch(param).then(res => {
+    menu_first.value = res.data
   })
 }
 
@@ -238,6 +240,7 @@ const firstMenuSelect = (value: number) => {
   let param = {
     id: value
   }
+  
   menuList(param).then(res => {
     console.log('请求菜单:' + JSON.stringify(res))
   })

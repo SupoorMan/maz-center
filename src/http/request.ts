@@ -2,6 +2,7 @@ import { store } from "@/stores/status";
 import axios from "axios";
 import { ElMessage } from "element-plus";
 import { ref } from "vue";
+import { Active } from "./RA";
 
 // 创建一个 axios 实例
 const service = axios.create({
@@ -19,7 +20,16 @@ const service = axios.create({
 service.interceptors.request.use(
   function (config) {
     // const status = store();
-    console.log("请求携带token:" + localStorage.getItem("token"));
+    // console.log("请求携带token:" + localStorage.getItem("token"));
+    // console.log("请求携带token:" + config.method);
+    // console.log("请求携带token:" + config.url);
+    if (config.method == "get") {
+      console.log("请求携带token:" + config.url);
+      config.headers.set(
+        "x-request-times",
+        Active.value.find((n) => n.point === config.url)?.times
+      );
+    }
     config.headers.set("token", localStorage.getItem("token"));
     return config;
   },

@@ -10,9 +10,8 @@ declare namespace Obj {
   type cert = {
     platform?: String;
     timestamp?: String;
-    version?: 'M-1.0.1';
+    version?: "M-1.0.1";
   };
-
 
   //全局方案配置
   type optionConfig = {
@@ -60,9 +59,12 @@ declare namespace Obj {
   // 菜单
   type Menu = {
     id: number;
-    topId: number;
+    pId: number;
+    level: number;
     label: string;
     path?: string;
+    usable: number;
+    deletable: number;
   };
   type Menu2 = {
     id: number;
@@ -76,6 +78,9 @@ declare namespace Obj {
     1: Menu[];
     2: Menu[];
   };
-
 }
 
+class Params {
+  times: number = 1;
+  data: any;
+}
