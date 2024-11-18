@@ -63,14 +63,9 @@ import RouteDetail from '@/components/base/RouteDetail.vue';
 import Condition from '@/components/base/Condition.vue';
 import type { CheckboxValueType } from 'element-plus'
 import { ref } from 'vue';
-import {page} from '@/http/Users'
 
 const aaa = () => {
-    page({}).then(res=>{
-        console.log(res)
-    }).catch(e=>{
-        console.log("请求错误")
-    })
+ 
     
 }
 

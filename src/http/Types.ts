@@ -1,9 +1,11 @@
-declare namespace Obj {
+declare namespace Types {
   //api响应类型
   type response = {
     code?: number;
     message?: String;
     data?: any;
+    cache?: any;
+    timeout?: any;
   };
 
   //临时凭证
@@ -78,9 +80,4 @@ declare namespace Obj {
     1: Menu[];
     2: Menu[];
   };
-}
-
-class Params {
-  times: number = 1;
-  data: any;
 }

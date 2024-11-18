@@ -8,6 +8,6 @@ export const store = defineStore("synchronizer", (()=> {
 
   return {
     token,
-    crt_first_menu
+    crt_first_menu,
   };
 }))

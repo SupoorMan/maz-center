@@ -11,7 +11,11 @@ import "element-plus/dist/index.css";
 
 import axios from "axios";
 
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 const store = createPinia();
+store.use(piniaPluginPersistedstate);
+export default store;
+
 const app = createApp(App);
 app.use(store);
 

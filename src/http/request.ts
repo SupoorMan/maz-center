@@ -1,8 +1,7 @@
-import { store } from "@/stores/status";
-import axios from "axios";
+import { cacheStore } from "@/stores/cache";
+import axios, { type InternalAxiosRequestConfig } from "axios";
 import { ElMessage } from "element-plus";
-import { ref } from "vue";
-import { Active } from "./RA";
+import { RequestActive } from "./Clazz";
 
 // 创建一个 axios 实例
 const service = axios.create({
@@ -18,26 +17,39 @@ const service = axios.create({
 
 // 添加请求拦截器
 service.interceptors.request.use(
-  function (config) {
-    // const status = store();
-    // console.log("请求携带token:" + localStorage.getItem("token"));
-    // console.log("请求携带token:" + config.method);
-    // console.log("请求携带token:" + config.url);
-    if (config.method == "get") {
-      console.log("请求携带token:" + config.url);
-      config.headers.set(
-        "x-request-times",
-        Active.value.find((n) => n.point === config.url)?.times
-      );
-    }
-    config.headers.set("token", localStorage.getItem("token"));
-    return config;
+  function (request) {
+    apiLog(request);
+
+    request.headers.set("token", localStorage.getItem("token"));
+    return request;
   },
   function (error) {
     ElMessage.error("请求:" + error);
     return Promise.reject(error);
   }
 );
+
+const apiLog = (request: InternalAxiosRequestConfig) => {
+  const e = new RequestActive();
+  e.point = request.url as string;
+
+  let xrt = 1;
+  const cache = cacheStore();
+  if (cache.active.length > 0) {
+    let before = cache.active[cache.active.length - 1];
+    if (before.point == request.url) {
+      xrt = before.times = before.times + 1;
+    } else {
+      e.times = before.times + 1;
+      cache.active.push(e);
+    }
+  } else {
+    e.times = 1;
+    cache.active.push(e);
+  }
+
+  request.headers.set("x-request-times", xrt);
+};
 
 // 添加响应拦截器
 service.interceptors.response.use(
@@ -48,9 +60,25 @@ service.interceptors.response.use(
       console.log("更新token:" + token);
     }
 
-    if (response.data.code != 200) {
-      ElMessage.error("响应:" + response.data.message);
-      return Promise.reject(response.data.message);
+    const cache = cacheStore();
+    if (response.data.cache) {
+      console.log("返回需要缓存数据");
+      //store
+      for (let i = cache.active.length - 1; i >= 0; i--) {
+        if (cache.active[i].point == response.config.url) {
+          cache.active[i].data = response.data;
+          break;
+        }
+      }
+    }
+    if (response.data.code === 330781) {
+      console.log("读取 --- 缓存数据");
+      for (let i = cache.active.length - 1; i >= 0; i--) {
+        if (cache.active[i].point == response.config.url) {
+          response.data = cache.active[i].data;
+          break;
+        }
+      }
     }
     return response.data;
   },

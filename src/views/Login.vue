@@ -31,7 +31,7 @@
                         <el-button style="width: 44%" color="crimson">注册</el-button>
                     </div>
                     <div>
-                        <el-button style="width: 44%" color="crimson">忘记密码</el-button>
+                        <el-button style="width: 44%" color="crimson" @click="test111">忘记密码</el-button>
                     </div>
                 </div>
 
@@ -110,6 +110,7 @@
 <script setup lang="ts">
 import { postCert, postLogin } from '@/http/Users';
 import router from '@/router';
+import { cacheStore } from '@/stores/cache';
 import { store } from '@/stores/status';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
@@ -120,6 +121,30 @@ import { onMounted, ref } from 'vue';
 onMounted(() => {
     login_cert()
 })
+
+const test111 = () => {
+    const cache = cacheStore();
+
+    let element = cache.active.find((n) => n.point === '/security/cert');
+    console.log(element)
+
+    cache.active.push({
+        point: "/hello",
+        times: 1,
+        timestamp: new Date().getTime(),
+        data: 123
+    })
+
+    if (element) {
+        console.log(1)
+    } else {
+        console.log(2)
+    }
+
+    cache.active.forEach(n => {
+        console.log('元素:' + JSON.stringify(n))
+    })
+}
 
 const showAuthor = ref(false)
 const loginType = ref([
@@ -199,7 +224,7 @@ const login_up = () => {
 
     user.value.cert = cert
     user.value.certP = certP
-    postLogin(user.value).then((res: Obj.response) => {
+    postLogin(user.value).then((res: any) => {
         if (res.code == 200) {
             ElMessage({
                 message: '登录成功!',
@@ -226,12 +251,7 @@ const login_up = () => {
 }
 
 const login_cert = () => {
-    let cert: any = localStorage.getItem('cert');
-    postCert(cert).then((res: M.response) => {
-        if (res.code == 200) {
-            localStorage.setItem('cert', res.data);
-        }
-    })
+    postCert()
 }
 </script>
 
