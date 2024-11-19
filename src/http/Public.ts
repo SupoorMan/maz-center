@@ -18,3 +18,11 @@ export const menuList = (param: any) => {
     params: param,
   });
 };
+
+export const getMenuSubList = (param: any) => {
+  return request.request({
+    url: "/menu/subList", //请求的接口路径
+    method: "get", //请求方法
+    params: param,
+  });
+};

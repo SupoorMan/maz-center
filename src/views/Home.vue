@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="2">搜索</el-col>
         <el-col :span="4">
-          <el-select v-model="status.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect" style="width: 88%">
+          <el-select v-model="menu.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect" style="width: 88%">
             <el-option v-for="item in menu_first" :key="item.id" :label="item.label" :value="item.id" />
             <template #footer>
               <el-button v-if="!isAdding" text bg size="small" @click="onAddOption">
@@ -41,53 +41,18 @@
     <div class="home-context">
       <div class="home-sub-menu">
         <el-menu default-active="2" class="sub-menu" :collapse="isCollapse" @open="handleOpen" @close="handleClose">
-
-          <el-sub-menu index="1">
+          <el-sub-menu :index="n.id" v-for="n in menu_third">
             <template #title>
               <el-icon>
                 <location />
               </el-icon>
-              <span>Navigator One</span>
+              <span>支付管理</span>
             </template>
             <el-menu-item-group>
-              <template #title><span>Group One</span></template>
-              <el-menu-item index="1-1">item one</el-menu-item>
-              <el-menu-item index="1-2">item two</el-menu-item>
+              <template #title><span>Pay</span></template>
+              <el-menu-item index="/merge" @click="jumpPay">{{ n.label }}</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="Group Two">
-              <el-menu-item index="1-3">item three</el-menu-item>
-            </el-menu-item-group>
-            <el-sub-menu index="1-4">
-              <template #title><span>item four</span></template>
-              <el-menu-item index="1-4-1">item one</el-menu-item>
-            </el-sub-menu>
           </el-sub-menu>
-          <el-menu-item index="2">
-            <el-icon><icon-menu /></el-icon>
-            <template #title>Navigator Two</template>
-          </el-menu-item>
-          <el-menu-item index="3" disabled>
-            <el-icon>
-              <document />
-            </el-icon>
-            <template #title>Navigator Three</template>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <el-icon>
-              <setting />
-            </el-icon>
-            <template #title>Navigator Four</template>
-          </el-menu-item>
-
-          <el-menu-item index="0" @click="isCollapse = !isCollapse" class="menu-collapse">
-            <el-icon v-if="isCollapse">
-              <DArrowRight />
-            </el-icon>
-            <el-icon v-if="!isCollapse">
-              <DArrowLeft />
-            </el-icon>
-            <template #title>Open</template>
-          </el-menu-item>
         </el-menu>
       </div>
 
@@ -115,6 +80,8 @@ import { store } from '@/stores/status';
 import { menuList, MenuSearch } from '@/http/Public';
 import { testAPIs } from '@/http/Users';
 import axios from 'axios';
+import { menuStore } from '@/stores/menu';
+import router from '@/router';
 
 const images = ref<any[]>([])
 const downloadFile = () => {
@@ -131,7 +98,7 @@ const downloadFile = () => {
 }
 
 
-const status = store()
+const menu = menuStore()
 
 const testAPI = () => {
   console.log("测试接口")
@@ -141,7 +108,7 @@ const testAPI = () => {
 }
 
 const menu_first = ref<Types.Menu[]>()
-const menu_second = ref<Types.Menu2[]>()
+const menu_second = ref<Types.Menu2[]>([])
 const menu_third = ref<Types.Menu[]>()
 
 const projectGroup = ref<CheckboxValueType[]>([])
@@ -153,13 +120,14 @@ onMounted(() => {
   //一级
   const cache_crt_first_menu = localStorage.getItem('crt_first_menu')
   if (cache_crt_first_menu) {
-    status.crt_first_menu = parseInt(cache_crt_first_menu)
+    menu.crt_first_menu = parseInt(cache_crt_first_menu)
+    firstMenuSelect(menu.crt_first_menu)
   }
 
   //二级
-  const cache_crt_second_menu = localStorage.getItem('crt_second_menu')
+  const cache_crt_second_menu = menu.crt_second_menu
   if (cache_crt_second_menu) {
-    let second_menu_id = parseInt(cache_crt_second_menu)
+    let second_menu_id = cache_crt_second_menu
 
     menu_second.value?.forEach(n => {
       if (n.id == second_menu_id) {
@@ -170,6 +138,11 @@ onMounted(() => {
 
   //三级
 })
+
+//跳转h5
+const jumpPay = () => {
+  router.push('/pay')
+}
 
 const getFirstMenuList = () => {
   let param = {
@@ -185,11 +158,13 @@ const firstMenuSelect = (value: number) => {
   localStorage.setItem('crt_first_menu', '' + value)
 
   let param = {
-    id: value
+    pid: value
   }
-  
+
   menuList(param).then(res => {
-    console.log('请求菜单:' + JSON.stringify(res))
+    menu_second.value = res.data
+    menu_second.value[0].style = "color: #409eff;" //默认第一个
+    menu.crt_second_menu = menu_second.value[0].id
   })
 }
 
@@ -201,6 +176,14 @@ const menu_second_click = (row: Types.Menu2) => {
     if (n.id != row.id) {
       n.style = ''
     }
+  })
+
+  let param = {
+    pid: menu.crt_second_menu
+  }
+  MenuSearch(param).then(res => {
+    console.log('333:' + res)
+    menu_third.value = res.data
   })
 }
 

@@ -14,6 +14,11 @@ const router = createRouter({
       component: Login,
     },
     {
+      path: "/pay",
+      name: "h5pay",
+      component: () => import("../views/ganqiguo/H5Pay.vue"),
+    },
+    {
       path: "/",
       name: "主页",
       component: Home,

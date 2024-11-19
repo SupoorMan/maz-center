@@ -70,10 +70,13 @@ declare namespace Types {
   };
   type Menu2 = {
     id: number;
-    topId: number;
+    pId: number;
+    level: number;
     label: string;
     path?: string;
-    style?: string;
+    usable: number;
+    deletable: number;
+    style?: any;
   };
   type MenuALL = {
     0: Menu[];

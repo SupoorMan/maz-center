@@ -132,7 +132,7 @@ const test111 = () => {
         point: "/hello",
         times: 1,
         timestamp: new Date().getTime(),
-        data: 123
+        data: null
     })
 
     if (element) {
