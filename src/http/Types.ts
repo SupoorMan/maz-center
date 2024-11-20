@@ -4,8 +4,6 @@ declare namespace Types {
     code?: number;
     message?: String;
     data?: any;
-    cache?: any;
-    timeout?: any;
   };
 
   //临时凭证

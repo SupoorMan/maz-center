@@ -1,5 +1,5 @@
 import type { RequestActive } from "@/http/Clazz";
-import { defineStore, mapActions } from "pinia";
+import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const cacheStore = defineStore(
@@ -16,3 +16,14 @@ export const cacheStore = defineStore(
   }
 );
 
+export const getCache = (point: string) => {
+  const cache = cacheStore();
+  for (let i = cache.active.length - 1; i >= 0; i--) {
+    if (cache.active[i].point == point) {
+      console.log("返回cache:" + JSON.stringify(cache.active[i]));
+      
+      return cache.active[i];
+    }
+  }
+  return null;
+};

@@ -1,4 +1,4 @@
-import { cacheStore } from "@/stores/cache";
+import { cacheStore, getCache } from "@/stores/cache";
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import { ElMessage } from "element-plus";
 import { RequestActive } from "./Clazz";
@@ -61,24 +61,15 @@ service.interceptors.response.use(
     }
 
     const cache = cacheStore();
-    if (response.data.cache) {
-      console.log("返回需要缓存数据");
-      //store
-      for (let i = cache.active.length - 1; i >= 0; i--) {
-        if (cache.active[i].point == response.config.url) {
-          cache.active[i].data = response.data;
-          break;
-        }
+    for (let i = cache.active.length - 1; i >= 0; i--) {
+      if (cache.active[i].point == response.config.url) {
+        cache.active[i].data = response.data;
+        break;
       }
     }
     if (response.data.code === 330781) {
       console.log("读取 --- 缓存数据");
-      for (let i = cache.active.length - 1; i >= 0; i--) {
-        if (cache.active[i].point == response.config.url) {
-          response.data = cache.active[i].data;
-          break;
-        }
-      }
+      response.data = getCache(response.config.url as string)?.data;
     }
     return response.data;
   },

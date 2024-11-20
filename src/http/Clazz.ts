@@ -7,9 +7,7 @@ export class RequestActive {
   timestamp: number = new Date().getTime();
   data: Types.response = {
     code: 200,
-    message: "",
-    data: {},
-    cache: false,
-    timeout: -1,
+    message: "success",
+    data: null,
   };
 }

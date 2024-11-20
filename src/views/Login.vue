@@ -128,12 +128,12 @@ const test111 = () => {
     let element = cache.active.find((n) => n.point === '/security/cert');
     console.log(element)
 
-    cache.active.push({
-        point: "/hello",
-        times: 1,
-        timestamp: new Date().getTime(),
-        data: null
-    })
+    // cache.active.push({
+    //     point: "/hello",
+    //     times: 1,
+    //     timestamp: new Date().getTime(),
+    //     data: null
+    // })
 
     if (element) {
         console.log(1)
@@ -202,8 +202,6 @@ const user = ref({
     username: '',
     password: '',
     cert: '',
-    certP: '',
-    platform: "M",
 })
 
 const loginDisabled = ref(false)
@@ -215,15 +213,13 @@ const login_up = () => {
         return
     }
     let cert = localStorage.getItem('cert');
-    let certP = localStorage.getItem('cert_p');
-    if (cert == null || certP == null) {
+    if (cert == null) {
         ElMessage.error({ message: '登录状态不可用,请稍后再试!', grouping: true })
         loginDisabled.value = false;
         return
     }
 
     user.value.cert = cert
-    user.value.certP = certP
     postLogin(user.value).then((res: any) => {
         if (res.code == 200) {
             ElMessage({
