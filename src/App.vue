@@ -21,7 +21,7 @@ watch(cache.active, (n, o) => {
   // o.forEach(n => {
   //   console.log('---触发监听---O:' + JSON.stringify(n))
   // })
-  console.log(1111)
+  console.log('Log')
 })
 </script>
 

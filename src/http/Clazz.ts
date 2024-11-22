@@ -11,3 +11,9 @@ export class RequestActive {
     data: null,
   };
 }
+
+export class Cert {
+  value: String = "";
+  platform: string = "M";
+  version: string = "M-1.0.1";
+}

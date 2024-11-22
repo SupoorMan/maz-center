@@ -220,7 +220,7 @@ router.beforeEach((to, from, next) => {
   // } else {
   //   next();
   // }
-  console.log("路由:" + store().token);
+  //console.log("路由:" + store().token);
   next();
 });
 

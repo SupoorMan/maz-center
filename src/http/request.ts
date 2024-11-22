@@ -2,6 +2,7 @@ import { cacheStore, getCache } from "@/stores/cache";
 import axios, { type InternalAxiosRequestConfig } from "axios";
 import { ElMessage } from "element-plus";
 import { RequestActive } from "./Clazz";
+import { securityStore } from "@/stores/security";
 
 // 创建一个 axios 实例
 const service = axios.create({
@@ -54,12 +55,6 @@ const apiLog = (request: InternalAxiosRequestConfig) => {
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
-    let token = response.headers.token;
-    if (token && token.length > response.data.code / (2 << 2)) {
-      localStorage.setItem("token", token);
-      console.log("更新token:" + token);
-    }
-
     const cache = cacheStore();
     for (let i = cache.active.length - 1; i >= 0; i--) {
       if (cache.active[i].point == response.config.url) {
@@ -74,7 +69,7 @@ service.interceptors.response.use(
     return response.data;
   },
   function (error) {
-    ElMessage.error("API: " + error);
+    ElMessage.error("服务器正在维护中,请稍后再试!");
     return Promise.reject(error);
   }
 );

@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="2">搜索</el-col>
         <el-col :span="4">
-          <el-select v-model="menu.crt_first_menu" placeholder="请选择项目组" @change="firstMenuSelect" style="width: 88%">
+          <el-select v-model="menu.crt_menu_1" placeholder="请选择项目组" @change="firstMenuSelect" style="width: 88%">
             <el-option v-for="item in menu_first" :key="item.id" :label="item.label" :value="item.id" />
             <template #footer>
               <el-button v-if="!isAdding" text bg size="small" @click="onAddOption">
@@ -40,7 +40,7 @@
 
     <div class="home-context">
       <div class="home-sub-menu">
-        <el-menu default-active="2" class="sub-menu" :collapse="isCollapse" @open="handleOpen" @close="handleClose">
+        <el-menu default-active="-1" class="sub-menu" :collapse="isCollapse" @open="handleOpen" @close="handleClose">
           <el-sub-menu :index="n.id" v-for="n in menu_third">
             <template #title>
               <el-icon>
@@ -77,7 +77,7 @@ import {
 import { onMounted, ref } from 'vue';
 import type { CheckboxValueType } from 'element-plus'
 import { store } from '@/stores/status';
-import { menuList, MenuSearch } from '@/http/Public';
+import { menuList, getMenuList } from '@/http/Public';
 import { testAPIs } from '@/http/Users';
 import axios from 'axios';
 import { menuStore } from '@/stores/menu';
@@ -115,17 +115,17 @@ const projectGroup = ref<CheckboxValueType[]>([])
 
 const menu_all = ref<Types.MenuALL>()//所有菜单
 onMounted(() => {
-  getFirstMenuList()
+  firstMenu()
 
   //一级
   const cache_crt_first_menu = localStorage.getItem('crt_first_menu')
   if (cache_crt_first_menu) {
-    menu.crt_first_menu = parseInt(cache_crt_first_menu)
-    firstMenuSelect(menu.crt_first_menu)
+    menu.crt_menu_1 = parseInt(cache_crt_first_menu)
+    firstMenuSelect(menu.crt_menu_1)
   }
 
   //二级
-  const cache_crt_second_menu = menu.crt_second_menu
+  const cache_crt_second_menu = menu.crt_menu_2
   if (cache_crt_second_menu) {
     let second_menu_id = cache_crt_second_menu
 
@@ -144,16 +144,17 @@ const jumpPay = () => {
   router.push('/pay')
 }
 
-const getFirstMenuList = () => {
+//一级目录
+const firstMenu = () => {
   let param = {
     pid: -1
   }
-  MenuSearch(param).then(res => {
+  getMenuList(param).then(res => {
     menu_first.value = res.data
   })
 }
 
-//一级 变动触发
+//点击 一级目录
 const firstMenuSelect = (value: number) => {
   localStorage.setItem('crt_first_menu', '' + value)
 
@@ -164,7 +165,7 @@ const firstMenuSelect = (value: number) => {
   menuList(param).then(res => {
     menu_second.value = res.data
     menu_second.value[0].style = "color: #409eff;" //默认第一个
-    menu.crt_second_menu = menu_second.value[0].id
+    menu.crt_menu_2 = menu_second.value[0].id
   })
 }
 
@@ -179,9 +180,9 @@ const menu_second_click = (row: Types.Menu2) => {
   })
 
   let param = {
-    pid: menu.crt_second_menu
+    pid: menu.crt_menu_2
   }
-  MenuSearch(param).then(res => {
+  getMenuList(param).then(res => {
     console.log('333:' + res)
     menu_third.value = res.data
   })

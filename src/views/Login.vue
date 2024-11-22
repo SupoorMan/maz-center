@@ -103,6 +103,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -111,15 +112,22 @@
 import { postCert, postLogin } from '@/http/Users';
 import router from '@/router';
 import { cacheStore } from '@/stores/cache';
-import { store } from '@/stores/status';
+import { securityStore } from '@/stores/security';
 import { ElMessage } from 'element-plus';
 import { onMounted, ref } from 'vue';
-// import { store } from "@/stores/status";
-// import { storeToRefs } from "pinia";
 
-// const { token } = storeToRefs(store());
 onMounted(() => {
-    login_cert()
+    const security = securityStore()
+    if (security.logged) {
+        ElMessage({
+            message: '欢迎回来!',
+            type: 'success'
+        })
+
+        router.push('/')
+    } else {
+        login_cert()
+    }
 })
 
 const test111 = () => {
@@ -212,37 +220,22 @@ const login_up = () => {
         loginDisabled.value = false;
         return
     }
-    let cert = localStorage.getItem('cert');
-    if (cert == null) {
-        ElMessage.error({ message: '登录状态不可用,请稍后再试!', grouping: true })
-        loginDisabled.value = false;
-        return
-    }
 
-    user.value.cert = cert
-    postLogin(user.value).then((res: any) => {
-        if (res.code == 200) {
+    postLogin(user.value)?.then(res => {
+        if (res.data.code == 200) {
+            const security = securityStore();
+            security.token = res.headers.token;
+            security.logged = true;
+
             ElMessage({
                 message: '登录成功!',
                 type: 'success'
             })
 
-            localStorage.removeItem('cert');
-            localStorage.removeItem('cert_p');
-
             router.push('/')
-        } else {
-            if (res.code == 1001) {
-                localStorage.removeItem('cert');
-                localStorage.removeItem('cert_p');
-            }
-
-            ElMessage.error('' + res.message)
-            loginDisabled.value = false;
         }
     }).catch(e => {
-        ElMessage.error('登录失败: 请刷新页面!')
-        loginDisabled.value = false;
+        ElMessage.error('登录失败,请刷新页面重试!')
     })
 }
 
@@ -336,5 +329,6 @@ const login_cert = () => {
             background-color: #ffffff;
         }
     }
+
 }
 </style>

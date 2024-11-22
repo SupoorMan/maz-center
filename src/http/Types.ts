@@ -6,13 +6,6 @@ declare namespace Types {
     data?: any;
   };
 
-  //临时凭证
-  type cert = {
-    platform?: String;
-    timestamp?: String;
-    version?: "M-1.0.1";
-  };
-
   //全局方案配置
   type optionConfig = {
     id?: any;
@@ -81,4 +74,5 @@ declare namespace Types {
     1: Menu[];
     2: Menu[];
   };
+
 }

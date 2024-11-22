@@ -3,7 +3,7 @@ import request from "./request";
 class Param {}
 
 // --------------- 菜单 ---------------
-export const MenuSearch = (param: object) => {
+export const getMenuList = (param: object) => {
   return request.request({
     url: "/menu/list", //请求的接口路径
     method: "get", //请求方法
