@@ -15,7 +15,7 @@ export const ptList = (param: any, header: string) => {
   });
 };
 
-export const updatePt = (param: Obj.ProductTemplate) => {
+export const updatePt = (param: Types.ProductTemplate) => {
   return request.request({
     url: "/pt/update", //请求的接口路径
     method: "post", //请求方法
@@ -23,7 +23,7 @@ export const updatePt = (param: Obj.ProductTemplate) => {
   });
 };
 
-export const addPt = (param: Obj.ProductTemplate) => {
+export const addPt = (param: Types.ProductTemplate) => {
   return request.request({
     url: "/pt/add", //请求的接口路径
     method: "post", //请求方法

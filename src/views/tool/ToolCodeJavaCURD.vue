@@ -155,11 +155,11 @@ import {
 
 const placeholder = ref('配置方案')
 const current = ref()
-const optionList = ref<Array<Obj.optionConfig>>([])
+const optionList = ref<Array<Types.optionConfig>>([])
 
 const dialogFormVisible = ref(false)
 const formLabelWidth = '40px'
-const form: Obj.optionConfig = reactive({})
+const form: Types.optionConfig = reactive({})
 const currentRoute = router.currentRoute.value;
 
 onMounted(() => {
@@ -171,7 +171,7 @@ onMounted(() => {
         scope: currentRoute.meta.scope as string
     }
     list(param).then((res) => {
-        res.data.forEach((n: Obj.optionConfig) => {
+        res.data.forEach((n: Types.optionConfig) => {
             optionList.value.push(n)
         });
     }).catch(e => {
@@ -186,12 +186,12 @@ onMounted(() => {
 const addOption = () => {
     dialogFormVisible.value = false
 
-    let param: Obj.optionConfig = {
+    let param: Types.optionConfig = {
         label: form.label,
         userid: 1,
         scope: currentRoute.meta.scope as string
     }
-    add(param).then((res: Obj.response) => {
+    add(param).then((res: Types.response) => {
         if (res.code == 200) {
             param.id = res.data
             optionList.value.push(param)
@@ -204,7 +204,7 @@ const addOption = () => {
 const db_title = ref('阿里云-数筑云-maz')
 const db_type = ref('Mysql')
 
-const optionDB = ref<Obj.optionDB>({})
+const optionDB = ref<Types.optionDB>({})
 
 const saveDB = () => {
 
@@ -240,7 +240,7 @@ const onConfirm = () => {
             userid: 1,
             // scope: props.current as string
         }
-        // add(param).then((res: Obj.response) => {
+        // add(param).then((res: Types.response) => {
         //     if (res.code == 200) {
         //         param.id = res.data
         //         props.list.push(param)
@@ -255,7 +255,7 @@ const deleteOption = (id: number) => {
     let param = {
         id: id
     }
-    // del(param).then((res: Obj.response) => {
+    // del(param).then((res: Types.response) => {
     //     if (res.code == 200) {
     //         for (let i = 0; i < props.list.length; i++) {
     //             if (props.list[i].id == id) {

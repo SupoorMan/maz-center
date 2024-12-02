@@ -17,3 +17,18 @@ export class Cert {
   platform: string = "M";
   version: string = "M-1.0.1";
 }
+
+export class Menu {
+  id?: number;
+  pid?: number;
+  level?: number;
+  label?: string;
+  path?: string;
+  usable?: number;
+  deletable?: number;
+
+  // constructor(id: number) {
+  //   this.id = id;
+  // }
+
+}

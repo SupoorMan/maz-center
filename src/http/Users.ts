@@ -30,15 +30,15 @@ export const postLogin = (param: any) => {
     return null;
   }
 
-  // const security = securityStore();
-  return axios.post(request.getUri() + "/security/login", param)
-  // .then((res) => {
-  //   if (res.data.code == 200) {
-  //     security.token = res.headers.token;
-  //     security.logged = true;
-  //   }
-  // });
-  // return security.logged;
+  return axios.post(request.getUri() + "/security/login", param);
+};
+
+export const postLogout = () => {
+  return request.request({
+    url: "/security/logout", //请求的接口路径
+    method: "post", //请求方法
+    //data: null,
+  });
 };
 
 export const testAPIs = () => {

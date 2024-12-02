@@ -52,7 +52,7 @@ declare namespace Types {
   // 菜单
   type Menu = {
     id: number;
-    pId: number;
+    pid: number;
     level: number;
     label: string;
     path?: string;
@@ -61,13 +61,13 @@ declare namespace Types {
   };
   type Menu2 = {
     id: number;
-    pId: number;
+    pid: number;
     level: number;
     label: string;
     path?: string;
     usable: number;
     deletable: number;
-    style?: any;
+    style: any;
   };
   type MenuALL = {
     0: Menu[];

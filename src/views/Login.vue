@@ -103,33 +103,62 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
 
 
 <script setup lang="ts">
-import { postCert, postLogin } from '@/http/Users';
+import { postCert, postLogin, postLogout } from '@/http/Users';
 import router from '@/router';
 import { cacheStore } from '@/stores/cache';
 import { securityStore } from '@/stores/security';
-import { ElMessage } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import { onMounted, ref } from 'vue';
 
 onMounted(() => {
     const security = securityStore()
     if (security.logged) {
-        ElMessage({
-            message: '欢迎回来!',
-            type: 'success'
-        })
-
-        router.push('/')
+        onLogin()
     } else {
         login_cert()
     }
 })
 
+const onLogin = () => {
+    ElMessageBox.confirm(
+        '是否退出重新登录?',
+        '提示',
+        {
+            confirmButtonText: '退出',
+            cancelButtonText: '取消',
+            type: 'warning',
+        }
+    )
+        .then(() => {
+            ElMessage({
+                type: 'success',
+                message: '退出成功!',
+            })
+            logout()
+        })
+        .catch(() => {
+            ElMessage({
+                type: 'success',
+                message: '欢迎回来!',
+            })
+
+            router.push('/')
+        })
+}
+
+const logout = () => {
+    postLogout().then(res => {
+        const security = securityStore()
+        security.clear()
+
+        login_cert()
+    })
+}
 const test111 = () => {
     const cache = cacheStore();
 

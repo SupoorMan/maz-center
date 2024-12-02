@@ -1,17 +1,21 @@
+import router from "@/router";
 import { cacheStore, getCache } from "@/stores/cache";
-import axios, { type InternalAxiosRequestConfig } from "axios";
+import { securityStore } from "@/stores/security";
+import axios, {
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from "axios";
 import { ElMessage } from "element-plus";
 import { RequestActive } from "./Clazz";
-import { securityStore } from "@/stores/security";
 
 // 创建一个 axios 实例
 const service = axios.create({
   baseURL: "https://127.0.0.1:443/manage", // 所有的请求地址前缀部分
-  timeout: 30000, // 请求超时时间毫秒
+  timeout: 50000, // 请求超时时间毫秒
   withCredentials: true, // 异步请求携带cookie
   headers: {
     "Content-Type": "application/json;charset=utf-8",
-    // "Access-Control-Allow-Origin": "*",
+    //"Access-Control-Allow-Origin": "*",
     "X-Request-With": "XMLHttpRequest",
   },
 });
@@ -19,9 +23,8 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
   function (request) {
-    apiLog(request);
-
-    request.headers.set("token", localStorage.getItem("token"));
+    start_log(request);
+    request.headers.set("token", securityStore().token);
     return request;
   },
   function (error) {
@@ -30,7 +33,31 @@ service.interceptors.request.use(
   }
 );
 
-const apiLog = (request: InternalAxiosRequestConfig) => {
+// 添加响应拦截器
+service.interceptors.response.use(
+  function (response) {
+    end_log(response);
+
+    if (response.headers.token) {
+      securityStore().token = response.headers.token;
+    }
+    if (response.data.code == 401) {
+      ElMessage({
+        type: "success",
+        message: response.data.message,
+      });
+
+      router.push("/login");
+    }
+    return response.data;
+  },
+  function (error) {
+    ElMessage.error("服务器正在维护中,请稍后再试!");
+    return Promise.reject(error);
+  }
+);
+
+const start_log = async (request: InternalAxiosRequestConfig) => {
   const e = new RequestActive();
   e.point = request.url as string;
 
@@ -48,29 +75,20 @@ const apiLog = (request: InternalAxiosRequestConfig) => {
     e.times = 1;
     cache.active.push(e);
   }
-
   request.headers.set("x-request-times", xrt);
 };
 
-// 添加响应拦截器
-service.interceptors.response.use(
-  function (response) {
-    const cache = cacheStore();
-    for (let i = cache.active.length - 1; i >= 0; i--) {
-      if (cache.active[i].point == response.config.url) {
-        cache.active[i].data = response.data;
-        break;
-      }
+const end_log = async (response: AxiosResponse) => {
+  const cache = cacheStore();
+  for (let i = cache.active.length - 1; i >= 0; i--) {
+    if (cache.active[i].point == response.config.url) {
+      cache.active[i].data = response.data;
+      break;
     }
-    if (response.data.code === 330781) {
-      console.log("读取 --- 缓存数据");
-      response.data = getCache(response.config.url as string)?.data;
-    }
-    return response.data;
-  },
-  function (error) {
-    ElMessage.error("服务器正在维护中,请稍后再试!");
-    return Promise.reject(error);
   }
-);
+  if (response.data.code === 330781) {
+    console.log("读取 --- 缓存数据");
+    response.data = getCache(response.config.url as string)?.data;
+  }
+};
 export default service;

@@ -7,9 +7,14 @@ export const securityStore = defineStore(
     const token = ref();
     const logged = ref(false);
 
+    const clear = () => {
+      token.value = "";
+      logged.value = false;
+    };
     return {
       token,
       logged,
+      clear
     };
   },
   {

@@ -9,7 +9,7 @@ import router from "./router";
 import ElementPlus from "element-plus";
 import "element-plus/dist/index.css";
 
-import axios from "axios";
+// import axios from "axios";
 
 import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
 const store = createPinia();
@@ -19,7 +19,7 @@ export default store;
 const app = createApp(App);
 app.use(store);
 
-app.config.globalProperties.$axios = axios;
+// app.config.globalProperties.$axios = axios;
 app.use(router);
 app.use(ElementPlus);
 

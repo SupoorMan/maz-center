@@ -150,8 +150,8 @@ const handleChange = (val: string[]) => {
     console.log(val)
 }
 
-const tableData = ref<Array<Obj.ProductTemplate>>()
-const classifyLists = ref<Array<Obj.Classify>>()
+const tableData = ref<Array<Types.ProductTemplate>>()
+const classifyLists = ref<Array<Types.Classify>>()
 
 const getClassify = () => {
     classifyList().then((res) => {
@@ -159,8 +159,8 @@ const getClassify = () => {
     })
 }
 
-const param = ref<Obj.ProductTemplate>({})
-const updateParam = ref<Obj.ProductTemplate>({})
+const param = ref<Types.ProductTemplate>({})
+const updateParam = ref<Types.ProductTemplate>({})
 const list = ptList(param.value, 'manage').then((res) => {
     if (res.data) {
         tableData.value = res.data
@@ -176,7 +176,7 @@ const search = () => {
 }
 
 
-const handleEdit = (index: number, row: Obj.ProductTemplate) => {
+const handleEdit = (index: number, row: Types.ProductTemplate) => {
     // console.log(index, row)
     dialogVisible.value = true
 
@@ -186,7 +186,7 @@ const handleEdit = (index: number, row: Obj.ProductTemplate) => {
     }
 }
 
-const handleDelete = (index: number, row: Obj.ProductTemplate) => {
+const handleDelete = (index: number, row: Types.ProductTemplate) => {
     // console.log(index, row)
     ElMessage('防止错删,暂未开放!')
 }
@@ -196,13 +196,13 @@ const update = () => {
 
     if (dialogVisibleAdd.value) {
         updateParam.value.sourcePrice = updateParam.value.selfSourcePrice
-        addPt(updateParam.value as Obj.ProductTemplate).then(res => {
+        addPt(updateParam.value as Types.ProductTemplate).then(res => {
             dialogVisibleAdd.value = false
 
             updateParam.value = {}
         })
     } else {
-        updatePt(updateParam.value as Obj.ProductTemplate).then(res => {
+        updatePt(updateParam.value as Types.ProductTemplate).then(res => {
             // location.reload()
         })
     }
@@ -225,7 +225,7 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (
     response: any,
     uploadFile: any
 ) => {
-    imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+    //imageUrl.value = URL.createTypesectURL(uploadFile.raw!)
 
     updateParam.value.cover = response.data
 }

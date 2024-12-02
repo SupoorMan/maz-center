@@ -9,12 +9,22 @@
           <span v-for="n in menu_second" :key="n.id" @click="menu_second_click(n)" :style="n.style">
             {{ n.label }}
           </span>
+          <span v-if="menu.editing">✖️</span>
         </el-col>
         <el-col :span="2">搜索</el-col>
         <el-col :span="4">
           <el-select v-model="menu.crt_menu_1" placeholder="请选择项目组" @change="firstMenuSelect" style="width: 88%">
-            <el-option v-for="item in menu_first" :key="item.id" :label="item.label" :value="item.id" />
-            <template #footer>
+            <el-option v-for="item in menu_first" :key="item.id" :label="item.label" :value="item.id">
+              <span style="float: left">{{ item.label }}</span>
+
+              <span style="float: right; color: var(--el-text-color-secondary);font-size: 14px;"
+                @click="deleteMenu(item)" v-if="menu.editing">
+                <span style="font-size: 10px;">❌</span>
+              </span>
+            </el-option>
+
+
+            <template #footer v-if="menu.editing">
               <el-button v-if="!isAdding" text bg size="small" @click="onAddOption">
                 新增
               </el-button>
@@ -32,8 +42,12 @@
         </el-col>
 
         <el-col :span="1">
-          <el-button @click="testAPI">∞</el-button>
+          <el-switch v-model="menu.editing" class="" inline-prompt
+            style="--el-switch-on-color: #0cbbc3; --el-switch-off-color: #409eff" active-text="编辑" inactive-text="经典"
+            :active-action-icon="Tools" :inactive-action-icon="HelpFilled">
+          </el-switch>
         </el-col>
+
         <el-col :span="2">用户信息</el-col>
       </el-row>
     </div>
@@ -69,51 +83,21 @@
 
 
 <script setup lang="ts">
-import {
-  Document,
-  Menu as IconMenu,
-  Location, Search, Setting, DArrowRight, DArrowLeft
-} from '@element-plus/icons-vue';
-import { onMounted, ref } from 'vue';
-import type { CheckboxValueType } from 'element-plus'
-import { store } from '@/stores/status';
-import { menuList, getMenuList } from '@/http/Public';
+import { Menu } from '@/http/Clazz';
+import { postMenuDelete } from '@/http/Menu';
+import { addMenu, getMenuList, menuList } from '@/http/Public';
 import { testAPIs } from '@/http/Users';
-import axios from 'axios';
-import { menuStore } from '@/stores/menu';
 import router from '@/router';
+import { menuStore } from '@/stores/menu';
+import {
+  HelpFilled,
+  Location,
+  Tools
+} from '@element-plus/icons-vue';
+import axios from 'axios';
+import { ElMessageBox, type CheckboxValueType } from 'element-plus';
+import { h, onMounted, ref } from 'vue';
 
-const images = ref<any[]>([])
-const downloadFile = () => {
-  axios({
-    url: 'http://127.0.0.1:8033/system/syncData/getScreen',
-    method: 'GET',
-  }).then((response) => {
-    console.log(response.data.data)
-
-    images.value = response.data.data
-  }).catch((error) => {
-    console.error('下载文件时发生错误:', error);
-  });
-}
-
-
-const menu = menuStore()
-
-const testAPI = () => {
-  console.log("测试接口")
-  testAPIs().then(res => {
-    console.log(res)
-  })
-}
-
-const menu_first = ref<Types.Menu[]>()
-const menu_second = ref<Types.Menu2[]>([])
-const menu_third = ref<Types.Menu[]>()
-
-const projectGroup = ref<CheckboxValueType[]>([])
-
-const menu_all = ref<Types.MenuALL>()//所有菜单
 onMounted(() => {
   firstMenu()
 
@@ -139,6 +123,65 @@ onMounted(() => {
   //三级
 })
 
+const images = ref<any[]>([])
+const downloadFile = () => {
+  axios({
+    url: 'http://127.0.0.1:8033/system/syncData/getScreen',
+    method: 'GET',
+  }).then((response) => {
+    console.log(response.data.data)
+
+    images.value = response.data.data
+  }).catch((error) => {
+    console.error('下载文件时发生错误:', error);
+  });
+}
+
+
+const menu = menuStore()
+
+const deleteMenu = (_menu: Types.Menu) => {
+  console.log('删除菜单:' + _menu.id)
+
+  ElMessageBox({
+    title: '菜单删除提示',
+    message: h('p', null, [
+      h('span', null, '请确认是否删除'),
+      h('b', { style: 'color: #e93434' }, _menu.level),
+      h('span', null, '级菜单'),
+      h('b', { style: 'color: #e93434' }, _menu.label),
+      h('span', null, '以及其子菜单?'),
+    ]),
+    confirmButtonText: '确认',
+    showCancelButton: true,
+    cancelButtonText: '取消',
+    type: 'error',
+    appendTo: 'div',
+    beforeClose: (action, instance, done) => {
+      if (action === 'confirm') {
+        let param = new Menu();
+        param.id = _menu.id;
+        postMenuDelete(param)
+
+        if (menu.crt_menu_1 == _menu.id) {
+          location.reload()
+        }
+        done()
+      } else {
+        done()
+      }
+    }
+  })
+}
+
+const menu_first = ref<Types.Menu[]>()
+const menu_second = ref<Types.Menu2[]>([])
+const menu_third = ref<Types.Menu[]>()
+
+const projectGroup = ref<CheckboxValueType[]>([])
+
+const menu_all = ref<Types.MenuALL>()//所有菜单
+
 //跳转h5
 const jumpPay = () => {
   router.push('/pay')
@@ -151,6 +194,9 @@ const firstMenu = () => {
   }
   getMenuList(param).then(res => {
     menu_first.value = res.data
+    if (menu.crt_menu_1 == -1) {
+      menu.crt_menu_1 = res.data[0].id
+    }
   })
 }
 
@@ -161,15 +207,21 @@ const firstMenuSelect = (value: number) => {
   let param = {
     pid: value
   }
-
-  menuList(param).then(res => {
+  getMenuList(param).then((res: Types.response) => {
     menu_second.value = res.data
-    menu_second.value[0].style = "color: #409eff;" //默认第一个
-    menu.crt_menu_2 = menu_second.value[0].id
+
+    if (menu_second.value) {
+      for (let i = 0; i < menu_second.value.length; i++) {
+        menu_second.value[i].style = "color: #409eff;" //默认第一个
+        menu.crt_menu_2 = menu_second.value[i].id
+        break
+      }
+    }
   })
 }
 
 const menu_second_click = (row: Types.Menu2) => {
+  console.log(1)
   row.style = 'color: #409eff;'
   localStorage.setItem('crt_second_menu', '' + row.id)
 
@@ -201,11 +253,19 @@ const onAddOption = () => {
 
 const onConfirm = () => {
   if (optionName.value) {
-    // menu_lv1.value.push({
-    //   id: 1,
-    //   topId: 1,
-    //   label: optionName.value,
-    // })
+    let menu = new Menu()
+    menu.label = optionName.value
+    menu.level = 1
+    menu.pid = -1
+    menu.usable = 1
+    menu.deletable = 0
+
+    addMenu(menu).then(res => {
+      if (res.data.code == 200) {
+        console.log('新增成功')
+      }
+    })
+
     clear()
   }
 }

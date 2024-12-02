@@ -62,7 +62,7 @@ const onConfirm = () => {
             userid: 1,
             scope: props.current as string
         }
-        add(param).then((res: Obj.response) => {
+        add(param).then((res: Types.response) => {
             if (res.code == 200) {
                 param.id = res.data
                 props.list.push(param)
@@ -77,7 +77,7 @@ const deleteOption = (id: number) => {
     let param = {
         id: id
     }
-    del(param).then((res: Obj.response) => {
+    del(param).then((res: Types.response) => {
         if (res.code == 200) {
             for (let i = 0; i < props.list.length; i++) {
                 if (props.list[i].id == id) {

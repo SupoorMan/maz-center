@@ -2,7 +2,7 @@ import request from "./request";
 
 const root = "/optionConfig";
 
-export const get = (param: Obj.optionConfig) => {
+export const get = (param: Types.optionConfig) => {
   return request.request({
     url: root + "/get",
     method: "get",
@@ -10,7 +10,7 @@ export const get = (param: Obj.optionConfig) => {
   });
 };
 
-export const list = (param: Obj.optionConfig) => {
+export const list = (param: Types.optionConfig) => {
   return request.request({
     url: root + "/list",
     method: "get",
@@ -18,7 +18,7 @@ export const list = (param: Obj.optionConfig) => {
   });
 };
 
-export const add = (param: Obj.optionConfig) => {
+export const add = (param: Types.optionConfig) => {
   return request.request({
     url: root + "/add",
     method: "post",
@@ -26,7 +26,7 @@ export const add = (param: Obj.optionConfig) => {
   });
 };
 
-export const del = (param: Obj.optionConfig) => {
+export const del = (param: Types.optionConfig) => {
   return request.request({
     url: root + "/delete",
     method: "post",
