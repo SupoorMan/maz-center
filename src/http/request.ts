@@ -47,6 +47,9 @@ service.interceptors.response.use(
         message: response.data.message,
       });
 
+      const security = securityStore();
+      security.logged = false;
+
       router.push("/login");
     }
     return response.data;

@@ -165,13 +165,6 @@ const test111 = () => {
     let element = cache.active.find((n) => n.point === '/security/cert');
     console.log(element)
 
-    // cache.active.push({
-    //     point: "/hello",
-    //     times: 1,
-    //     timestamp: new Date().getTime(),
-    //     data: null
-    // })
-
     if (element) {
         console.log(1)
     } else {
@@ -235,7 +228,7 @@ const getPhoneCode = () => {
 }
 
 const user = ref({
-    loginType: 0,
+    type: 0,
     username: '',
     password: '',
     cert: '',
