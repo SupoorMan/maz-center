@@ -93,13 +93,35 @@ declare namespace Types {
     finalCost: number;
     income: number;
     lossNum: number;
-    owner: "大军";
+    owner: string;
     remark: null;
     startTime: Date;
     status: number;
     totalNum: number;
     type: number;
     updateId: number;
+    createTime: Date;
+    updateTime: Date;
+    children: OrdersDetail[];
+  };
+
+  type OrdersDetail = {
+    id: number;
+    orders_id: number;
+    orderNumber: string;
+    details: string;
+    receiveTime: Date;
+    pickupAddress: string;
+    deliveryAddress: string;
+    customerName: string;
+    customerContact: string;
+    deliveryTimeLimit: number;
+    deliveryPhoto: string;
+    courier: string;
+    owner: string;
+    remark: string;
+    rewardPoints: number;
+    createTime: Date;
     updateTime: Date;
   };
 }

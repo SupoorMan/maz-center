@@ -18,7 +18,7 @@
             <el-col :span="24">订单新增,导入,导出,打印</el-col>
             <el-col :span="24">
                 <el-table :data="tableData" :border="true" :preserve-expanded-content="true"
-                    style="width: 100%">
+                    style="width: 100%" @expand-change="openLine">
                     <el-table-column type="expand">
                         <template #default="props">
                             <div m="4">
@@ -37,8 +37,23 @@
                             </div>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Date" prop="date" />
-                    <el-table-column label="Name" prop="name" />
+                    <el-table-column label="开团时间" prop="startTime" />
+                    <el-table-column label="结束时间" prop="endTime" />
+                    <el-table-column label="总单数" prop="totalNum" />
+                    <el-table-column label="退单数" prop="backNum" />
+                    <el-table-column label="总收入" prop="income" />
+                    <el-table-column label="状态" prop="status">
+                        <template #default="{ row }">
+                            <span>
+                                {{
+                                    row.status === 0 ? '未开始' :
+                                    row.status === 1 ? '进行中' :
+                                    row.status === 2 ? '结束' :
+                                    row.status === 3 ? '完结' : '-'
+                                }}
+                            </span>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -66,11 +81,6 @@ const orderPage = ()=>{
     let params = {
         current: 1,
         size: 10,
-        orderNo: null,
-        orderStatus: null,
-        orderType: null,
-        startTime: null,
-        endTime: null,
     }
     getOrderPage(params).then((res: Types.response)=>{
         if (res.code == 200) {
@@ -82,6 +92,16 @@ const orderPage = ()=>{
             })
         } 
     })
+}
+
+// 打开行
+const openLine = (row: any, expanded: boolean) => {
+    console.log('打开行', row);
+    if (expanded) {
+        console.log('打开行', row);
+    } else {
+        console.log('关闭行', row);
+    }
 }
 </script>
 
