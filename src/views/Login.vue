@@ -113,18 +113,19 @@ import router from '@/router';
 import { cacheStore } from '@/stores/cache';
 import { securityStore } from '@/stores/security';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { fa } from 'element-plus/es/locales.mjs';
 import { onMounted, ref } from 'vue';
 
 onMounted(() => {
     const security = securityStore()
     if (security.logged) {
-        onLogin()
+        confirmLogin()
     } else {
         login_cert()
     }
 })
 
-const onLogin = () => {
+const confirmLogin = () => {
     ElMessageBox.confirm(
         '是否退出重新登录?',
         '提示',
@@ -228,10 +229,8 @@ const getPhoneCode = () => {
 }
 
 const user = ref({
-    type: 0,
     username: '',
-    password: '',
-    cert: '',
+    password: ''
 })
 
 const loginDisabled = ref(false)
@@ -246,7 +245,7 @@ const login_up = () => {
     postLogin(user.value)?.then(res => {
         if (res.data.code == 200) {
             const security = securityStore();
-            security.token = res.headers.token;
+            security.token = res.headers.authorization;
             security.logged = true;
 
             ElMessage({
@@ -255,6 +254,8 @@ const login_up = () => {
             })
 
             router.push('/')
+        }else{
+            loginDisabled.value = false;
         }
     }).catch(e => {
         ElMessage.error('登录失败,请刷新页面重试!')

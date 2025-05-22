@@ -2,17 +2,17 @@ declare namespace Types {
   //api响应类型
   type response = {
     code?: number;
-    message?: String;
+    message?: string;
     data?: any;
   };
 
   //全局方案配置
   type optionConfig = {
     id?: any;
-    label?: String;
-    remark?: String;
+    label?: string;
+    remark?: string;
     userid?: number;
-    scope?: String;
+    scope?: string;
   };
 
   //方案 - 数据库配置
@@ -50,14 +50,25 @@ declare namespace Types {
   };
 
   // 菜单
+  type AllMenu = {
+    project: Array<Menu>;
+    menu0: Array<Menu>;
+    menu1: Array<Menu>;
+  };
+
   type Menu = {
     id: number;
-    pid: number;
-    level: number;
-    label: string;
+    name: string;
+    title: string;
+    permCode: string;
+    scopeType: string;
+    sortIndex: number;
+    disabled: number;
+    hide: number;
+    router: string;
+    icon: string;
     path?: string;
-    usable: number;
-    deletable: number;
+    style: string;
   };
   type Menu2 = {
     id: number;
@@ -75,4 +86,20 @@ declare namespace Types {
     2: Menu[];
   };
 
+  type Orders = {
+    id: number;
+    backNum: number;
+    endTime: Date;
+    finalCost: number;
+    income: number;
+    lossNum: number;
+    owner: "大军";
+    remark: null;
+    startTime: Date;
+    status: number;
+    totalNum: number;
+    type: number;
+    updateId: number;
+    updateTime: Date;
+  };
 }

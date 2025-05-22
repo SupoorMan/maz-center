@@ -5,7 +5,7 @@ import { Cert } from "./Clazz";
 import request from "./request";
 
 export const postCert = () => {
-  let api = "/security/cert";
+  let api = "/auth/cert";
 
   let param = new Cert();
   let e = getCache(api);
@@ -20,22 +20,13 @@ export const postCert = () => {
   });
 };
 
-const check = (api: string) => {};
-
 export const postLogin = (param: any) => {
-  let e = getCache("/security/cert");
-  if (e) {
-    param.cert = e.data.data;
-  } else {
-    return null;
-  }
-
-  return axios.post(request.getUri() + "/security/login", param);
+  return axios.postForm(request.getUri() + "/auth/login", param);
 };
 
 export const postLogout = () => {
   return request.request({
-    url: "/security/logout", //请求的接口路径
+    url: "/auth/logout", //请求的接口路径
     method: "post", //请求方法
     //data: null,
   });

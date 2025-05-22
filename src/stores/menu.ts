@@ -1,16 +1,19 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
+// This store is used to manage the menu state in the application.
 export const menuStore = defineStore(
   "MENU",
   () => {
-    const crt_menu_1 = ref(-1)
-    const crt_menu_2 = ref(-1)
+    const menu_1st = ref()
+    const menu_2nd = ref()
+    const menu_3rd = ref()
     const editing = ref(false)
 
     return {
-      crt_menu_1,
-      crt_menu_2,
+      menu_1st,
+      menu_2nd,
+      menu_3rd,
       editing
     };
   },

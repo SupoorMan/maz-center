@@ -10,7 +10,7 @@ import { RequestActive } from "./Clazz";
 
 // 创建一个 axios 实例
 const service = axios.create({
-  baseURL: "https://127.0.0.1:443/manage", // 所有的请求地址前缀部分
+  baseURL: "https://127.0.0.1:443", // 所有的请求地址前缀部分
   timeout: 50000, // 请求超时时间毫秒
   withCredentials: true, // 异步请求携带cookie
   headers: {
@@ -23,8 +23,8 @@ const service = axios.create({
 // 添加请求拦截器
 service.interceptors.request.use(
   function (request) {
-    start_log(request);
-    request.headers.set("token", securityStore().token);
+    //start_log(request);
+    request.headers.set("authorization", securityStore().token);
     return request;
   },
   function (error) {
@@ -36,10 +36,10 @@ service.interceptors.request.use(
 // 添加响应拦截器
 service.interceptors.response.use(
   function (response) {
-    end_log(response);
+    //end_log(response);
 
     if (response.headers.token) {
-      securityStore().token = response.headers.token;
+      securityStore().token = response.headers.authorization;
     }
     if (response.data.code == 401) {
       ElMessage({

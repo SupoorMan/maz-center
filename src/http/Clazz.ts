@@ -20,15 +20,11 @@ export class Cert {
 
 export class Menu {
   id?: number;
-  pid?: number;
-  level?: number;
-  label?: string;
-  path?: string;
-  usable?: number;
-  deletable?: number;
-
-  // constructor(id: number) {
-  //   this.id = id;
-  // }
-
+  name?: string;
+  title?: string;
+  permCode?: string;
+  scope?: string;
+  parentId?: number;
+  sortIndex?: number;
+  depth?: number;
 }
