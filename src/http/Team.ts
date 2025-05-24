@@ -4,9 +4,9 @@ import type { Menu } from "./Clazz";
 class Param {}
 
 // --------------- 订单相关 ---------------
-export const getOrderPage = (param: object) => {
+export const getTeamList = (param: object) => {
   const res = request.request({
-    url: "/order/page",
+    url: "/team/list",
     method: "get",
     params: param,
   });

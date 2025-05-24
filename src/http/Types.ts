@@ -88,6 +88,7 @@ declare namespace Types {
 
   type Orders = {
     id: number;
+    name: string;
     backNum: number;
     endTime: Date;
     finalCost: number;
@@ -107,8 +108,9 @@ declare namespace Types {
 
   type OrdersDetail = {
     id: number;
-    orders_id: number;
+    ordersId: number;
     orderNumber: string;
+    team: string;
     details: string;
     receiveTime: Date;
     pickupAddress: string;
@@ -118,10 +120,23 @@ declare namespace Types {
     deliveryTimeLimit: number;
     deliveryPhoto: string;
     courier: string;
+    courierPhone: string;
     owner: string;
     remark: string;
     rewardPoints: number;
     createTime: Date;
     updateTime: Date;
+    selfRemark: string;
+    status: number; // 订单状态: 0.新订单 1.已备货 2.缺货 3.配送中 4.已送达 5.已评价 6.已到账 7.已退款 8.完成 9.漏货完成 10.坏果完成
+  };
+
+  type Team = {
+    id: number;
+    name: string;
+    tags: string;
+    owner: string; // 团长
+    ownerPhone: string; // 团长电话
+    num: number; //人数
+    disabled: number; //0.已启用 1.已禁用
   };
 }
